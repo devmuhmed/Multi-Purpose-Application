@@ -18,6 +18,9 @@ Route::get('/', function () {
 });
 
 
-Route::get('/admin/dashboard', function (){
-    return view('dashboard');
+//Route::get('/admin/dashboard', function (){
+//    return view('dashboard');
+//});
+Route::group(['namespace' => 'App\\Http\\Controllers'],function () {
+    Route::get('{view}','ApplicationController')->where('view', '.*');
 });

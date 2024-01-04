@@ -1,12 +1,29 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 
 const users = ref([]);
+const form = reactive({
+    name: '',
+    email: '',
+    password: '',
+})
 
 const getUsers = () => {
     axios.get('/api/users')
     .then( (response) => {
         users.value = response.data
+    })
+    .catch()
+}
+
+const createUser = () => {
+    axios.post('/api/users',form)
+    .then((response) => {
+        users.value.unshift(response.data);
+        form.name = ''
+        form.email = ''
+        form.password = ''
+        $('#createUserModal').modal('hide');
     })
     .catch()
 }
@@ -84,26 +101,26 @@ onMounted(() => {
                 <form autocomplete="off">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" class="form-control " id="name"
+                        <input v-model="form.name" type="text" class="form-control " id="name"
                                aria-describedby="nameHelp" placeholder="Enter full name">
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control " id="email"
+                        <input v-model="form.email" type="email" class="form-control " id="email"
                                aria-describedby="nameHelp" placeholder="Enter full name">
                     </div>
                 </form>
 
                 <div class="form-group">
                     <label for="email">Password</label>
-                    <input type="password" class="form-control " id="password"
+                    <input v-model="form.password" type="password" class="form-control " id="password"
                            aria-describedby="nameHelp" placeholder="Enter password">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button @click="createUser" type="button" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>

@@ -167,44 +167,44 @@
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item">
-                        <a href="/admin/dashboard" class="nav-link">
+                        <router-link to="/admin/dashboard" active-class="active" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
                                 Dashboard
                             </p>
-                        </a>
+                        </routerlink>
                     </li>
                     <li class="nav-item">
-                        <a href="/admin/appointments" class="nav-link">
+                        <router-link to="/admin/appointments" active-class="active" class="nav-link">
                             <i class="nav-icon fas fa-calendar-alt"></i>
                             <p>
                                 Appointments
                             </p>
-                        </a>
+                        </routerlink>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <router-link to="/admin/users" active-class="active" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 users
                             </p>
-                        </a>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <router-link to="/admin/settings" active-class="active" class="nav-link">
                             <i class="nav-icon fas fa-cog"></i>
                             <p>
                                 settings
                             </p>
-                        </a>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <router-link to="/admin/profile" active-class="active" class="nav-link">
                             <i class="nav-icon fas fa-user"></i>
                             <p>
                                 Profile
                             </p>
-                        </a>
+                        </router-link>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">

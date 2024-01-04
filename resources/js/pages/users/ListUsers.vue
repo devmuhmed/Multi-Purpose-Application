@@ -1,17 +1,19 @@
 <script setup>
- const users = [
-    {
-        id: 1,
-        name: 'John Doe',
-        email: 'john@example.com',
-    },
+import { onMounted, ref } from "vue";
 
-    {
-        id: 1,
-        name: 'John Doe',
-        email: 'john@example.com',
-    },
-];
+const users = ref([]);
+
+const getUsers = () => {
+    axios.get('/api/users')
+    .then( (response) => {
+        users.value = response.data
+    })
+    .catch()
+}
+
+onMounted(() => {
+    getUsers()
+})
 </script>
 
 

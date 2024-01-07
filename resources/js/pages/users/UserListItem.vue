@@ -29,19 +29,17 @@ const deleteUser = () => {
         .catch()
 }
 
-const editUser = (user) => {
-    emit('editUser', user)
-}
+
 </script>
 <template>
     <tr>
-        <td> {{ ++index }} </td>
+        <td> {{ index + 1 }} </td>
         <td> {{ user.name }} </td>
         <td> {{ user.email }} </td>
         <td> {{ formatDate(user.created_at) }} </td>
         <td> {{ user.role }} </td>
         <td>
-            <a href="#" @click.prevent="editUser(user)">
+            <a href="#" @click.prevent="$emit('editUser',user)">
                 <i class="far fa-edit"></i>
             </a>
             <a href="#" @click.prevent="confirmUserDeletion(user)">

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import {Form, Field} from "vee-validate";
 import * as yup from 'yup';
 import { useToaster } from "../../toastr.js";
@@ -8,7 +8,7 @@ import UserListItem from "./UserListItem.vue";
 const toaster = useToaster();
 const users = ref([]);
 const editing = ref(false);
-const formValues = ref();
+const formValues = ref({});
 const form = ref(null);
 
 
@@ -21,9 +21,7 @@ const createUserSchema = yup.object({
 const editUserSchema = yup.object({
     name: yup.string().required(),
     email: yup.string().email().required(),
-    password: yup.string().when((password, schema) => {
-        return password ? schema.required().min(6) : schema;
-    }),
+    password: yup.string().nullable().min(6),
 })
 
 const getUsers = () => {
@@ -80,9 +78,9 @@ const handleSubmit = (values, actions) => {
     editing.value ? updateUser(values, actions) : createUser(values, actions)
 }
 
-const useSchema = () => {
+const useSchema = computed(() => {
     return editing.value ? editUserSchema : createUserSchema
-}
+})
 
 const userDeleted = (userId) => {
     users.value = users.value.filter(user => user.id !== userId)

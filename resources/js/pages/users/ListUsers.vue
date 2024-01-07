@@ -145,7 +145,7 @@ onMounted(() => {
                                 <td> {{ ++index }} </td>
                                 <td> {{ user.name }} </td>
                                 <td> {{ user.email }} </td>
-                                <td> {{ user.formatted_created_at }} </td>
+                                <td> {{ user.created_at }} </td>
                                 <td>-</td>
                                 <td>
                                     <a href="#" @click.prevent="editUser(user)">

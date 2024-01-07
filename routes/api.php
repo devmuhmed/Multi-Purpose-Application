@@ -22,4 +22,5 @@ Route::group(['namespace' => 'App\\Http\\Controllers\\Api\\Admin'],function() {
     Route::get('users','UserController@index');
     Route::post('users','UserController@store');
     Route::put('users/{user}','UserController@update');
+    Route::delete('users/{user}','UserController@destroy');
 });

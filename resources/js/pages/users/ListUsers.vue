@@ -2,7 +2,9 @@
 import { onMounted, reactive, ref } from "vue";
 import {Form, Field} from "vee-validate";
 import * as yup from 'yup';
+import { useToaster } from "../../toastr.js";
 
+const toaster = useToaster();
 const users = ref([]);
 const editing = ref(false);
 const formValues = ref();
@@ -36,6 +38,7 @@ const createUser = (values, {resetForm, setErrors}) => {
         users.value.unshift(response.data);
         $('#userFormModal').modal('hide');
         resetForm();
+        toaster.success('User created successfully')
     })
     .catch((error) => {
         if(error.response.data.errors){
@@ -62,6 +65,7 @@ const updateUser = (values, {setErrors}) => {
             const index = users.value.findIndex(user => user.id === response.data.id);
             users.value[index] = response.data; // Fix the typo here
             $('#userFormModal').modal('hide');
+            toaster.success('User updated successfully')
         })
         .catch((error) => {
             setErrors(error.response.data.errors);
@@ -78,7 +82,7 @@ const useSchema = () => {
     return editing.value ? editUserSchema : createUserSchema
 }
 onMounted(() => {
-    getUsers()
+    getUsers();
 })
 </script>
 

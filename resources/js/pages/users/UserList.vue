@@ -3,14 +3,14 @@ import { onMounted, reactive, ref } from "vue";
 import {Form, Field} from "vee-validate";
 import * as yup from 'yup';
 import { useToaster } from "../../toastr.js";
-import { formatDate } from "../../helper.js";
+import UserListItem from "./UserListItem.vue";
 
 const toaster = useToaster();
 const users = ref([]);
 const editing = ref(false);
 const formValues = ref();
 const form = ref(null);
-const userIdBeingDeleted = ref(null);
+
 
 const createUserSchema = yup.object({
     name: yup.string().required(),
@@ -84,19 +84,8 @@ const useSchema = () => {
     return editing.value ? editUserSchema : createUserSchema
 }
 
-const confirmUserDeletion = (user) => {
-    userIdBeingDeleted.value = user.id;
-    $('#deleteUserModal').modal('show');
-}
-
-const deleteUser = () => {
-    axios.delete(`/api/users/${userIdBeingDeleted.value}`)
-        .then(() => {
-            $('#deleteUserModal').modal('hide');
-            users.value = users.value.filter(user => user.id !== userIdBeingDeleted.value);
-            toaster.success('User deleted successfully!')
-        })
-        .catch()
+const userDeleted = (userId) => {
+    users.value = users.value.filter(user => user.id !== userId)
 }
 
 onMounted(() => {
@@ -142,21 +131,13 @@ onMounted(() => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(user, index) in users" :key="user.id">
-                                <td> {{ ++index }} </td>
-                                <td> {{ user.name }} </td>
-                                <td> {{ user.email }} </td>
-                                <td> {{ formatDate(user.created_at) }} </td>
-                                <td> {{ user.role }} </td>
-                                <td>
-                                    <a href="#" @click.prevent="editUser(user)">
-                                        <i class="far fa-edit"></i>
-                                    </a>
-                                    <a href="#" @click.prevent="confirmUserDeletion(user)">
-                                        <i class="fa fa-trash text-danger ml-2"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            <UserListItem v-for="(user, index) in users"
+                                          :key="user.id"
+                                          :user=user
+                                          :index=index
+                                          @edit-user="editUser"
+                                          @user-deleted="userDeleted"
+                            />
                         </tbody>
                     </table>
                 </div>
@@ -211,27 +192,4 @@ onMounted(() => {
     </div>
 </div>
 
-    <!-- Confirm Delete User Modal -->
-    <div class="modal fade" id="deleteUserModal" data-backdrop="static" tabindex="-1" role="dialog"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">
-                        <span>Delete User</span>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <h5>Are you sure you want to delete this user?</h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button @click.prevent="deleteUser" type="button" class="btn btn-primary">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </template>

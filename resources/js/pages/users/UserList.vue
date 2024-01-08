@@ -5,9 +5,10 @@ import * as yup from 'yup';
 import { useToaster } from "../../toastr.js";
 import UserListItem from "./UserListItem.vue";
 import { debounce } from "lodash";
+import { Bootstrap4Pagination} from "laravel-vue-pagination";
 
 const toaster = useToaster();
-const users = ref([]);
+const users = ref({'data': []});
 const editing = ref(false);
 const formValues = ref({});
 const form = ref(null);
@@ -25,8 +26,8 @@ const editUserSchema = yup.object({
     password: yup.string().nullable().min(6),
 })
 
-const getUsers = () => {
-    axios.get('/api/users')
+const getUsers = (page = 1) => {
+    axios.get(`/api/users?page=${page}`)
     .then( (response) => {
         users.value = response.data
     })
@@ -36,8 +37,8 @@ const getUsers = () => {
 const createUser = (values, {resetForm, setErrors}) => {
     axios.post('/api/users',values)
     .then((response) => {
-        users.value.unshift(response.data);
         $('#userFormModal').modal('hide');
+        users.value.unshift(response.data);
         resetForm();
         toaster.success('User created successfully')
     })
@@ -154,8 +155,8 @@ onMounted(() => {
                                 <th>Options</th>
                             </tr>
                         </thead>
-                        <tbody v-if="users.length > 0">
-                            <UserListItem v-for="(user, index) in users"
+                        <tbody v-if="users.data.length > 0">
+                            <UserListItem v-for="(user, index) in users.data"
                                           :key="user.id"
                                           :user=user
                                           :index=index
@@ -171,6 +172,10 @@ onMounted(() => {
                     </table>
                 </div>
             </div>
+            <Bootstrap4Pagination
+                :data="users"
+                @pagination-change-page="getUsers"
+            />
         </div>
     </div>
 

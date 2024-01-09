@@ -67,6 +67,7 @@ const updateUser = (values, {setErrors}) => {
     axios.put(`/api/users/${values.id}`, values)
         .then((response) => {
             const index = users.value.data.findIndex(user => user.id === response.data.id);
+
             users.value[index] = response.data; // Fix the typo here
             $('#userFormModal').modal('hide');
             toaster.success('User updated successfully')

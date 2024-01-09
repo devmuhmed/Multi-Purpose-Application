@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['namespace' => 'App\\Http\\Controllers\\Api\\Admin'],function() {
+
     Route::apiResource('users','UserController');
     Route::delete('users','UserController@bulkDelete');
     Route::patch('users/{user}/change-role','UserController@changeRole');

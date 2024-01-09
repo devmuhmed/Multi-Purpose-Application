@@ -1,17 +1,17 @@
 <script setup>
-import { formatDate } from "../../helper.js";
-import {ref} from "vue";
-import { useToaster } from "../../toastr.js";
-import UserListItem from "./UserListItem.vue";
+import {formatDate} from "../../helper.js";
+import {ref, watch} from "vue";
+import {useToaster} from "../../toastr.js";
 
 const toaster = useToaster();
 
-defineProps({
+const props = defineProps({
     user: Object,
     index: Number,
+    selectAll: Boolean,
 })
 
-const emit = defineEmits(['userDeleted', 'editUser']);
+const emit = defineEmits(['userDeleted', 'editUser', 'toggleSelection']);
 const userIdBeingDeleted = ref(null);
 
 const confirmUserDeletion = (user) => {
@@ -44,21 +44,35 @@ const changeRole = (user, role) => {
     axios.patch(`/api/users/${user.id}/change-role`, {
         role: role,
     })
-        .then(()=>{
+        .then(() => {
             toaster.success('Role updated successfully!')
         })
 }
 
+const toggleSelection = (e) => {
+    emit('toggleSelection', {user: props.user, status: e.target.checked})
+}
+
+watch(() => props.selectAll, () => {
+    emit('toggleSelection', {user: props.user, status: props.selectAll})
+})
+
 </script>
 <template>
     <tr>
-        <td> {{ index + 1 }} </td>
-        <td> {{ user.name }} </td>
-        <td> {{ user.email }} </td>
-        <td> {{ formatDate(user.created_at) }} </td>
+        <td>
+            <input type="checkbox" :checked="selectAll" @change="toggleSelection">
+        </td>
+        <td> {{ index + 1 }}</td>
+        <td> {{ user.name }}</td>
+        <td> {{ user.email }}</td>
+        <td> {{ formatDate(user.created_at) }}</td>
         <td>
             <select class="form-control" @change="changeRole(user,$event.target.value)">
-                <option v-for="role in roles" :value="role.value" :selected="user.role === role.name"  >{{ role.name }}</option>
+                <option v-for="role in roles" :value="role.value" :selected="user.role === role.name">{{
+                        role.name
+                    }}
+                </option>
             </select>
         </td>
         <td>

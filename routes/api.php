@@ -24,5 +24,6 @@ Route::group(['namespace' => 'App\\Http\\Controllers\\Api\\Admin'],function() {
     Route::patch('users/{user}/change-role','UserController@changeRole');
     Route::put('users/{user}','UserController@update');
     Route::delete('users/{user}','UserController@destroy');
+    Route::delete('users','UserController@bulkDelete');
     Route::get('users/search','UserController@search');
 });

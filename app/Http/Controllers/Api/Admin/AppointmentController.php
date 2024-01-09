@@ -28,4 +28,15 @@ class AppointmentController extends Controller
                 'client' => $appointment->client,
             ]);
     }
+
+    public function getStatusWithCount()
+    {
+        $cases = AppointmentStatus::cases();
+        return collect($cases)->map(fn($status) => [
+            'name' => $status->name,
+            'value' => $status->value,
+            'count' => Appointment::where('status', $status->value)->count(),
+            'color' => AppointmentStatus::from($status->value)->color(),
+        ]);
+    }
 }

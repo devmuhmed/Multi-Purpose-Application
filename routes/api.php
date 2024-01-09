@@ -28,5 +28,6 @@ Route::group(['namespace' => 'App\\Http\\Controllers\\Api\\Admin'],function() {
     Route::get('users/search','UserController@search');
 
     Route::get('appointments','AppointmentController@index');
+    Route::post('appointments/create','AppointmentController@store');
     Route::get('appointments/status','AppointmentController@getStatusWithCount');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Enums\AppointmentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ class AppointmentController extends Controller
     {
         return Appointment::query()
             ->with('client:id,first_name,last_name')
+            ->when(request('status'),fn($query) => $query->where('status',AppointmentStatus::from(request('status'))))
             ->latest()
             ->paginate()
             ->through(fn($appointment) => [

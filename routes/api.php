@@ -26,4 +26,6 @@ Route::group(['namespace' => 'App\\Http\\Controllers\\Api\\Admin'],function() {
     Route::delete('users/{user}','UserController@destroy');
     Route::delete('users','UserController@bulkDelete');
     Route::get('users/search','UserController@search');
+
+    Route::get('appointments','AppointmentController@index');
 });
